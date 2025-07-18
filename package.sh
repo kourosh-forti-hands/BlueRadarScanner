@@ -34,6 +34,7 @@ cp docker-compose.rosetta.yml $PACKAGE_DIR/
 cp docker-compose.dev.yml $PACKAGE_DIR/
 cp docker-run-mac.sh $PACKAGE_DIR/
 cp docker-run-simple.sh $PACKAGE_DIR/
+cp docker-run-local.sh $PACKAGE_DIR/
 cp build-fix.sh $PACKAGE_DIR/
 cp deploy.sh $PACKAGE_DIR/
 cp README.md $PACKAGE_DIR/

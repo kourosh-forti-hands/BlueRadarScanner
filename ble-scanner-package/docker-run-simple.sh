@@ -22,7 +22,7 @@ cat > docker-compose.runtime.yml << 'EOF'
 services:
   app:
     image: node:20-slim
-    working_dir: /app
+    working_dir: /workspace
     ports:
       - "5000:5000"
     environment:
@@ -31,14 +31,13 @@ services:
     depends_on:
       - db
     volumes:
-      - .:/app
-      - /app/node_modules
+      - .:/source:ro
     command: >
       bash -c "
         apt-get update && 
         apt-get install -y curl build-essential python3 &&
+        cp -r /source/* /workspace/ &&
         npm cache clean --force &&
-        rm -rf node_modules package-lock.json &&
         npm install --no-optional &&
         npm run build &&
         npm start
