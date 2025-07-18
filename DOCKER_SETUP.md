@@ -18,8 +18,13 @@ chmod +x docker-run-mac.sh
 
 ### If Build Fails (ARM64 Issues)
 ```bash
+# Option 1: Try the build fix
 chmod +x build-fix.sh
 ./build-fix.sh
+
+# Option 2: Use runtime build (most reliable)
+chmod +x docker-run-simple.sh
+./docker-run-simple.sh
 ```
 
 ### Option 2: Manual Setup
