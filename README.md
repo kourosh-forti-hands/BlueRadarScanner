@@ -115,30 +115,33 @@ pm2 startup
 pm2 save
 ```
 
-### Alternative: Docker Deployment
+### Docker Deployment
 
-Create a `Dockerfile`:
-```dockerfile
-FROM node:20-alpine
-
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm ci --only=production
-
-COPY . .
-RUN npm run build
-
-EXPOSE 5000
-
-CMD ["npm", "start"]
-```
-
-Build and run:
+#### Option 1: macOS with Bluetooth Support
 ```bash
-docker build -t ble-scanner .
-docker run -p 5000:5000 -e DATABASE_URL=your_db_url ble-scanner
+# Quick start (recommended)
+chmod +x docker-run-mac.sh
+./docker-run-mac.sh
+
+# Manual setup
+docker-compose -f docker-compose.mac.yml up -d --build
 ```
+
+#### Option 2: Standard Docker
+```bash
+# Build and run with database
+docker-compose up -d --build
+
+# Access at http://localhost:5000
+```
+
+#### Option 3: Development Mode
+```bash
+# Development with hot reload
+docker-compose -f docker-compose.mac.yml -f docker-compose.dev.yml up -d
+```
+
+See [DOCKER_SETUP.md](DOCKER_SETUP.md) for detailed Docker configuration and Bluetooth setup.
 
 ## Database Setup
 

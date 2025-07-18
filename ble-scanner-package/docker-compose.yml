@@ -12,7 +12,15 @@ services:
       - db
     volumes:
       - ./logs:/app/logs
+      - /var/run/dbus:/var/run/dbus:ro
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
+    network_mode: host
+    privileged: true
     restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
 
   db:
     image: postgres:15-alpine

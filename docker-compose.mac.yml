@@ -8,14 +8,15 @@ services:
     environment:
       - NODE_ENV=production
       - DATABASE_URL=postgresql://ble_user:ble_password@db:5432/ble_scanner
+      - BLUETOOTH_ENABLED=true
     depends_on:
       - db
     volumes:
       - ./logs:/app/logs
       - /var/run/dbus:/var/run/dbus:ro
-    devices:
-      - /dev/bus/usb:/dev/bus/usb
-    network_mode: host
+    # For macOS Docker Desktop
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     privileged: true
     restart: unless-stopped
     cap_add:

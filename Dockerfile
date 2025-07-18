@@ -2,6 +2,16 @@ FROM node:20-alpine
 
 WORKDIR /app
 
+# Install system dependencies for Bluetooth
+RUN apk add --no-cache \
+    bluez \
+    bluez-dev \
+    dbus \
+    curl \
+    python3 \
+    make \
+    g++
+
 # Copy package files
 COPY package*.json ./
 
@@ -17,6 +27,9 @@ RUN npm run build
 # Create logs directory
 RUN mkdir -p logs
 
+# Create dbus directory
+RUN mkdir -p /var/run/dbus
+
 # Expose port
 EXPOSE 5000
 
@@ -24,5 +37,5 @@ EXPOSE 5000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:5000/health || exit 1
 
-# Start the application
-CMD ["npm", "start"]
+# Start dbus and the application
+CMD ["sh", "-c", "dbus-daemon --system --fork && npm start"]

@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  app:
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./client:/app/client
+      - ./server:/app/server
+      - ./shared:/app/shared
+      - ./logs:/app/logs
+    command: npm run dev
+    stdin_open: true
+    tty: true

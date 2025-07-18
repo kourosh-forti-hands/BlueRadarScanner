@@ -27,9 +27,13 @@ cp .env.example $PACKAGE_DIR/
 cp ecosystem.config.js $PACKAGE_DIR/
 cp Dockerfile $PACKAGE_DIR/
 cp docker-compose.yml $PACKAGE_DIR/
+cp docker-compose.mac.yml $PACKAGE_DIR/
+cp docker-compose.dev.yml $PACKAGE_DIR/
+cp docker-run-mac.sh $PACKAGE_DIR/
 cp deploy.sh $PACKAGE_DIR/
 cp README.md $PACKAGE_DIR/
 cp QUICK_START.md $PACKAGE_DIR/
+cp DOCKER_SETUP.md $PACKAGE_DIR/
 
 # Create logs directory
 mkdir -p $PACKAGE_DIR/logs
