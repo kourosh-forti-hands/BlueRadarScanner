@@ -27,8 +27,10 @@ cp .env.example $PACKAGE_DIR/
 cp ecosystem.config.js $PACKAGE_DIR/
 cp Dockerfile $PACKAGE_DIR/
 cp Dockerfile.multi-arch $PACKAGE_DIR/
+cp Dockerfile.arm64-fix $PACKAGE_DIR/
 cp docker-compose.yml $PACKAGE_DIR/
 cp docker-compose.mac.yml $PACKAGE_DIR/
+cp docker-compose.rosetta.yml $PACKAGE_DIR/
 cp docker-compose.dev.yml $PACKAGE_DIR/
 cp docker-run-mac.sh $PACKAGE_DIR/
 cp build-fix.sh $PACKAGE_DIR/

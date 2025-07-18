@@ -18,7 +18,7 @@ COPY package*.json ./
 # Install dependencies with npm cache clean to avoid ARM64 issues
 RUN npm cache clean --force && \
     rm -rf node_modules package-lock.json && \
-    npm install --only=production
+    npm install --no-optional --only=production
 
 # Copy source code
 COPY . .

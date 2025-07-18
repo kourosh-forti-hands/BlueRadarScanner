@@ -1,0 +1,50 @@
+ => [app internal] load build context                                                                                                                                                                                          3.4s
+ => => transferring context: 315.64MB                                                                                                                                                                                          3.4s
+ => [app 2/9] WORKDIR /app                                                                                                                                                                                                     0.2s
+ => [app 3/9] RUN apt-get update && apt-get install -y     bluetooth     bluez     libbluetooth-dev     dbus     curl     python3     build-essential     && rm -rf /var/lib/apt/lists/*                                      25.5s
+ => [app 4/9] COPY package*.json ./                                                                                                                                                                                            0.1s 
+ => [app 5/9] RUN npm cache clean --force &&     npm install --only=production                                                                                                                                                 7.2s 
+ => [app 6/9] COPY . .                                                                                                                                                                                                         2.0s 
+ => ERROR [app 7/9] RUN npm run build                                                                                                                                                                                          0.2s 
+------                                                                                                                                                                                                                              
+ > [app 7/9] RUN npm run build:                                                                                                                                                                                                     
+0.151 
+0.151 > rest-express@1.0.0 build
+0.151 > vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+0.151 
+0.219 /app/node_modules/rollup/dist/native.js:64
+0.219           throw new Error(
+0.219                 ^
+0.219 
+0.219 Error: Cannot find module @rollup/rollup-linux-arm64-gnu. npm has a bug related to optional dependencies (https://github.com/npm/cli/issues/4828). Please try `npm i` again after removing both package-lock.json and node_modules directory.
+0.219     at requireWithFriendlyError (/app/node_modules/rollup/dist/native.js:64:9)
+0.219     at Object.<anonymous> (/app/node_modules/rollup/dist/native.js:73:76)
+0.219     ... 3 lines matching cause stack trace ...
+0.219     at Module._load (node:internal/modules/cjs/loader:1096:12)
+0.219     at cjsLoader (node:internal/modules/esm/translators:298:15)
+0.219     at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:240:7)
+0.219     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+0.219     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24) {
+0.219   [cause]: Error: Cannot find module '@rollup/rollup-linux-arm64-gnu'
+0.219   Require stack:
+0.219   - /app/node_modules/rollup/dist/native.js
+0.219       at Module._resolveFilename (node:internal/modules/cjs/loader:1212:15)
+0.219       at Module._load (node:internal/modules/cjs/loader:1043:27)
+0.219       at Module.require (node:internal/modules/cjs/loader:1298:19)
+0.219       at require (node:internal/modules/helpers:182:18)
+0.219       at requireWithFriendlyError (/app/node_modules/rollup/dist/native.js:46:10)
+0.219       at Object.<anonymous> (/app/node_modules/rollup/dist/native.js:73:76)
+0.219       at Module._compile (node:internal/modules/cjs/loader:1529:14)
+0.219       at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+0.219       at Module.load (node:internal/modules/cjs/loader:1275:32)
+0.219       at Module._load (node:internal/modules/cjs/loader:1096:12) {
+0.219     code: 'MODULE_NOT_FOUND',
+0.219     requireStack: [ '/app/node_modules/rollup/dist/native.js' ]
+0.219   }
+0.219 }
+0.219 
+0.219 Node.js v20.19.4
+------
+failed to solve: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
+⏳ Waiting for services to start...
+❌ Failed to start services. Check logs:

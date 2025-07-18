@@ -18,13 +18,17 @@ COPY package*.json ./
 
 # Install dependencies with fresh install to avoid architecture issues
 RUN npm cache clean --force && \
-    npm install --only=production
+    rm -rf package-lock.json && \
+    npm install --no-package-lock --only=production
 
 # Copy source code
 COPY . .
 
-# Build the application
-RUN npm run build
+# Install missing Rollup native bindings for ARM64
+RUN npm install @rollup/rollup-linux-arm64-gnu --save-optional || true
+
+# Build the application with fallback for Rollup issues
+RUN npm run build || (npm install --no-optional && npm run build)
 
 # Create logs directory
 RUN mkdir -p logs

@@ -1,0 +1,47 @@
+FROM node:20-slim
+
+WORKDIR /app
+
+# Install system dependencies for Bluetooth and build tools
+RUN apt-get update && apt-get install -y \
+    bluetooth \
+    bluez \
+    libbluetooth-dev \
+    dbus \
+    curl \
+    python3 \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy source code first to avoid node_modules conflicts
+COPY . .
+
+# Remove any existing node_modules and lock files
+RUN rm -rf node_modules package-lock.json
+
+# Install dependencies without optional packages first
+RUN npm cache clean --force && \
+    npm install --no-optional --only=production
+
+# Try to install ARM64 Rollup bindings separately
+RUN npm install @rollup/rollup-linux-arm64-gnu --save-optional --ignore-scripts || echo "Rollup ARM64 binding failed, continuing..."
+
+# Build with Vite using SWC instead of esbuild for better ARM64 support
+ENV VITE_ESBUILD_TARGET=node20
+RUN npm run build || (echo "Build failed, trying alternative..." && npm install vite@latest && npm run build)
+
+# Create logs directory
+RUN mkdir -p logs
+
+# Create dbus directory
+RUN mkdir -p /var/run/dbus
+
+# Expose port
+EXPOSE 5000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:5000/health || exit 1
+
+# Start dbus and the application
+CMD ["sh", "-c", "service dbus start && npm start"]

@@ -2,7 +2,9 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile.arm64-fix
+      dockerfile: Dockerfile
+      platforms:
+        - linux/amd64
     ports:
       - "5000:5000"
     environment:
@@ -14,7 +16,6 @@ services:
     volumes:
       - ./logs:/app/logs
       - /var/run/dbus:/var/run/dbus:ro
-    # For macOS Docker Desktop
     extra_hosts:
       - "host.docker.internal:host-gateway"
     privileged: true
