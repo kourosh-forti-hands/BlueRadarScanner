@@ -16,6 +16,8 @@ export const bleDevices = pgTable("ble_devices", {
   lastSeen: timestamp("last_seen").notNull().defaultNow(),
   deviceType: text("device_type"),
   isTargetDevice: boolean("is_target_device").notNull().default(false),
+  firstSeen: timestamp("first_seen").notNull().defaultNow(),
+  scanCount: integer("scan_count").notNull().default(1),
 });
 
 export const insertUserSchema = createInsertSchema(users).pick({
@@ -29,6 +31,8 @@ export const insertBleDeviceSchema = createInsertSchema(bleDevices).pick({
   rssi: true,
   deviceType: true,
   isTargetDevice: true,
+  firstSeen: true,
+  scanCount: true,
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;

@@ -33,7 +33,7 @@ export function useBluetoothScanner() {
     return macAddress.toUpperCase().startsWith('00:25:DF');
   }, []);
 
-  const generateMockDevice = useCallback((index: number): BluetoothDevice => {
+  const generateMockDevice = useCallback((index: number, onDeviceFound?: (device: BluetoothDevice) => void): BluetoothDevice => {
     const mockDevices = [
       { name: 'Temperature Sensor Pro', mac: '00:25:DF:A3:B7:C9', type: 'Environmental Monitor' },
       { name: 'Smart Lock Gateway', mac: '00:25:DF:F1:E2:D3', type: 'Access Control' },
@@ -43,7 +43,7 @@ export function useBluetoothScanner() {
     ];
     
     const device = mockDevices[index % mockDevices.length];
-    return {
+    const bluetoothDevice = {
       id: `${device.mac}-${Date.now()}`,
       name: device.name,
       macAddress: device.mac,
@@ -52,9 +52,16 @@ export function useBluetoothScanner() {
       deviceType: device.type,
       isTargetDevice: isTargetDevice(device.mac),
     };
+
+    // Call callback if provided
+    if (onDeviceFound) {
+      onDeviceFound(bluetoothDevice);
+    }
+
+    return bluetoothDevice;
   }, [isTargetDevice]);
 
-  const startScan = useCallback(async () => {
+  const startScan = useCallback(async (onDeviceFound?: (device: BluetoothDevice) => void) => {
     const isBluetoothSupported = checkBluetoothSupport();
     
     if (!isBluetoothSupported) {
@@ -80,7 +87,7 @@ export function useBluetoothScanner() {
       let deviceCount = 0;
       scanIntervalRef.current = setInterval(() => {
         if (deviceCount < 5) {
-          const newDevice = generateMockDevice(deviceCount);
+          const newDevice = generateMockDevice(deviceCount, onDeviceFound);
           setDevices(prev => {
             // Avoid duplicates
             const exists = prev.find(d => d.macAddress === newDevice.macAddress);

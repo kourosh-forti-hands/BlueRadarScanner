@@ -6,17 +6,41 @@ import { DeviceCard } from "@/components/device-card";
 import { ScanControls } from "@/components/scan-controls";
 import { BrowserSupportInfo } from "@/components/browser-support-info";
 import { useBluetoothScanner } from "@/hooks/use-bluetooth";
-import { Search, Bluetooth, Wifi, Clock, CheckCircle, Filter } from "lucide-react";
+import { useDeviceStorage } from "@/hooks/use-device-storage";
+import { Search, Bluetooth, Wifi, Clock, CheckCircle, Filter, Database } from "lucide-react";
 
 export default function BleScanner() {
-  const { devices, isScanning, isSupported, targetDevices } = useBluetoothScanner();
+  const { devices: scannedDevices, isScanning, isSupported, targetDevices: scannedTargetDevices } = useBluetoothScanner();
+  const { targetDevices: storedTargetDevices, saveDevice, isLoading } = useDeviceStorage();
   const [lastUpdate, setLastUpdate] = useState(new Date());
 
   useEffect(() => {
-    if (devices.length > 0) {
+    if (scannedDevices.length > 0) {
       setLastUpdate(new Date());
     }
-  }, [devices]);
+  }, [scannedDevices]);
+
+  // Save discovered devices to database
+  const handleDeviceFound = async (device: any) => {
+    try {
+      await saveDevice({
+        name: device.name,
+        macAddress: device.macAddress,
+        rssi: device.rssi,
+        deviceType: device.deviceType,
+        isTargetDevice: device.isTargetDevice,
+        firstSeen: new Date(),
+        scanCount: 1,
+      });
+    } catch (error) {
+      console.error('Failed to save device:', error);
+    }
+  };
+
+  // Combine scanned and stored devices, prioritizing recently scanned
+  const allTargetDevices = [...scannedTargetDevices, ...storedTargetDevices.filter(
+    stored => !scannedTargetDevices.some(scanned => scanned.macAddress === stored.macAddress)
+  )];
 
   const formatLastUpdate = () => {
     return lastUpdate.toLocaleTimeString('en-US', {
@@ -49,7 +73,7 @@ export default function BleScanner() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Scan Controls */}
         <div className="mb-8">
-          <ScanControls />
+          <ScanControls onDeviceFound={handleDeviceFound} />
         </div>
 
         {/* Device List */}
@@ -63,9 +87,9 @@ export default function BleScanner() {
           </div>
 
           {/* Target Devices */}
-          {targetDevices.length > 0 ? (
+          {allTargetDevices.length > 0 ? (
             <div className="space-y-4">
-              {targetDevices.map((device) => (
+              {allTargetDevices.map((device) => (
                 <DeviceCard key={device.id} device={device} />
               ))}
             </div>
@@ -116,7 +140,7 @@ export default function BleScanner() {
             </div>
             <div className="flex items-center space-x-2 text-signal-green">
               <CheckCircle className="h-4 w-4" />
-              <span>{targetDevices.length} devices</span>
+              <span>{allTargetDevices.length} devices</span>
             </div>
           </div>
         </div>

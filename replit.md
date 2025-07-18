@@ -110,12 +110,22 @@ The application uses two main tables:
 **Solution**: Unified project structure with shared TypeScript configuration
 **Rationale**: Simplified development workflow and shared type definitions
 
-### Memory Storage Fallback
-**Problem**: Database might not be available during initial development
-**Solution**: In-memory storage implementation matching database interface
-**Rationale**: Enables development without database setup while maintaining consistent API
+### Database Storage Implementation
+**Problem**: Need for persistent device storage and history tracking
+**Solution**: PostgreSQL with Drizzle ORM for type-safe database operations
+**Rationale**: Provides reliable data persistence with full TypeScript integration
 
 ### Component-First UI Architecture
 **Problem**: Maintaining consistent design system across application
 **Solution**: shadcn/ui components with Radix UI primitives
 **Rationale**: Provides accessible, customizable components with consistent styling
+
+## Recent Changes
+
+### January 18, 2025
+- **Database Integration**: Added PostgreSQL database support with Drizzle ORM
+- **Database Storage**: Replaced in-memory storage with persistent database storage
+- **Device Persistence**: BLE devices are now saved to database when discovered
+- **Enhanced Schema**: Added `firstSeen` and `scanCount` fields to track device history
+- **API Routes**: Implemented full CRUD operations for BLE devices
+- **Demo Mode**: Improved fallback when Web Bluetooth API is not available

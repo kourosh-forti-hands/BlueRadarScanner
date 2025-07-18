@@ -114,7 +114,7 @@ export function ScanControls({ onDeviceFound }: ScanControlsProps) {
             {/* Scan Controls */}
             <div className="flex items-center space-x-3">
               <Button
-                onClick={startScan}
+                onClick={() => startScan(onDeviceFound)}
                 disabled={isScanning}
                 className="bg-tech-blue hover:bg-blue-600 text-white"
               >
