@@ -1,0 +1,47 @@
+ => [app 5/9] RUN npm ci --only=production                                                                                                                                                                                     7.8s 
+ => [app 6/9] COPY . .                                                                                                                                                                                                         1.9s 
+ => ERROR [app 7/9] RUN npm run build                                                                                                                                                                                          0.2s 
+------                                                                                                                                                                                                                              
+ > [app 7/9] RUN npm run build:                                                                                                                                                                                                     
+0.159                                                                                                                                                                                                                               
+0.159 > rest-express@1.0.0 build                                                                                                                                                                                                    
+0.159 > vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+0.159 
+0.232 /app/node_modules/rollup/dist/native.js:63
+0.232           throw new Error(
+0.232                 ^
+0.232 
+0.232 Error: Cannot find module @rollup/rollup-linux-arm64-musl. npm has a bug related to optional dependencies (https://github.com/npm/cli/issues/4828). Please try `npm i` again after removing both package-lock.json and node_modules directory.
+0.232     at requireWithFriendlyError (/app/node_modules/rollup/dist/native.js:63:9)
+0.232     at Object.<anonymous> (/app/node_modules/rollup/dist/native.js:72:76)
+0.232     ... 3 lines matching cause stack trace ...
+0.232     at Module._load (node:internal/modules/cjs/loader:1096:12)
+0.232     at cjsLoader (node:internal/modules/esm/translators:298:15)
+0.232     at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:240:7)
+0.232     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+0.232     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24) {
+0.232   [cause]: Error: Cannot find module '@rollup/rollup-linux-arm64-musl'
+0.232   Require stack:
+0.232   - /app/node_modules/rollup/dist/native.js
+0.232       at Module._resolveFilename (node:internal/modules/cjs/loader:1212:15)
+0.232       at Module._load (node:internal/modules/cjs/loader:1043:27)
+0.232       at Module.require (node:internal/modules/cjs/loader:1298:19)
+0.232       at require (node:internal/modules/helpers:182:18)
+0.232       at requireWithFriendlyError (/app/node_modules/rollup/dist/native.js:45:10)
+0.232       at Object.<anonymous> (/app/node_modules/rollup/dist/native.js:72:76)
+0.232       at Module._compile (node:internal/modules/cjs/loader:1529:14)
+0.232       at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+0.232       at Module.load (node:internal/modules/cjs/loader:1275:32)
+0.232       at Module._load (node:internal/modules/cjs/loader:1096:12) {
+0.232     code: 'MODULE_NOT_FOUND',
+0.232     requireStack: [ '/app/node_modules/rollup/dist/native.js' ]
+0.232   }
+0.232 }
+0.232 
+0.232 Node.js v20.19.4
+------
+failed to solve: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
+⏳ Waiting for services to start...
+WARN[0000] /Users/kmobl/BlueRadarScanner/docker-compose.mac.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+❌ Failed to start services. Check logs:
+WARN[0000] /Users/kmobl/BlueRadarScanner/docker-compose.mac.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 

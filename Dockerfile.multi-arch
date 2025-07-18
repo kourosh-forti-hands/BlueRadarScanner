@@ -1,23 +1,23 @@
-FROM node:20-alpine
+FROM node:20-slim
 
 WORKDIR /app
 
-# Install system dependencies for Bluetooth
-RUN apk add --no-cache \
+# Install system dependencies for Bluetooth and build tools
+RUN apt-get update && apt-get install -y \
+    bluetooth \
     bluez \
-    bluez-dev \
+    libbluetooth-dev \
     dbus \
     curl \
     python3 \
-    make \
-    g++
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies with npm cache clean to avoid ARM64 issues
+# Install dependencies with fresh install to avoid architecture issues
 RUN npm cache clean --force && \
-    rm -rf node_modules package-lock.json && \
     npm install --only=production
 
 # Copy source code
@@ -40,4 +40,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:5000/health || exit 1
 
 # Start dbus and the application
-CMD ["sh", "-c", "dbus-daemon --system --fork && npm start"]
+CMD ["sh", "-c", "service dbus start && npm start"]

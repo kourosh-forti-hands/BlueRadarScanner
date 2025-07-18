@@ -15,8 +15,10 @@ RUN apk add --no-cache \
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install dependencies with npm cache clean to avoid ARM64 issues
+RUN npm cache clean --force && \
+    rm -rf node_modules package-lock.json && \
+    npm install --only=production
 
 # Copy source code
 COPY . .

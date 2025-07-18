@@ -16,6 +16,12 @@ chmod +x docker-run-mac.sh
 ./docker-run-mac.sh
 ```
 
+### If Build Fails (ARM64 Issues)
+```bash
+chmod +x build-fix.sh
+./build-fix.sh
+```
+
 ### Option 2: Manual Setup
 ```bash
 # Build and start services

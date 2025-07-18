@@ -10,13 +10,27 @@ if ! docker info > /dev/null 2>&1; then
     exit 1
 fi
 
+# Detect architecture
+ARCH=$(uname -m)
+echo "🔍 Detected architecture: $ARCH"
+
 # Stop any existing containers
 echo "🛑 Stopping existing containers..."
 docker-compose -f docker-compose.mac.yml down
 
+# Clean up any dangling images to avoid ARM64 issues
+echo "🧹 Cleaning up Docker cache..."
+docker system prune -f
+
 # Build and start services
 echo "🔨 Building and starting services..."
-docker-compose -f docker-compose.mac.yml up -d --build
+if [[ "$ARCH" == "arm64" ]]; then
+    echo "🏗️  Building for Apple Silicon (ARM64)..."
+    DOCKER_BUILDKIT=1 docker-compose -f docker-compose.mac.yml up -d --build --force-recreate
+else
+    echo "🏗️  Building for Intel (x86_64)..."
+    docker-compose -f docker-compose.mac.yml up -d --build
+fi
 
 # Wait for services to be ready
 echo "⏳ Waiting for services to start..."
