@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DeviceCard } from "@/components/device-card";
 import { ScanControls } from "@/components/scan-controls";
+import { BrowserSupportInfo } from "@/components/browser-support-info";
 import { useBluetoothScanner } from "@/hooks/use-bluetooth";
 import { Search, Bluetooth, Wifi, Clock, CheckCircle, Filter } from "lucide-react";
 
@@ -90,6 +91,9 @@ export default function BleScanner() {
             </Card>
           )}
         </div>
+
+        {/* Browser Support Information */}
+        <BrowserSupportInfo />
       </main>
 
       {/* Status Bar */}

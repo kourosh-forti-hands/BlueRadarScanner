@@ -18,6 +18,7 @@ export function ScanControls({ onDeviceFound }: ScanControlsProps) {
     isScanning,
     error,
     isSupported,
+    demoMode,
     startScan,
     stopScan,
     getScanDuration,
@@ -64,6 +65,7 @@ export function ScanControls({ onDeviceFound }: ScanControlsProps) {
   };
 
   const getScanStatus = () => {
+    if (!isSupported && demoMode) return "Demo mode - simulated scanning";
     if (!isSupported) return "Web Bluetooth not supported";
     if (error) return `Error: ${error}`;
     if (isScanning) return "Scanning for devices...";
@@ -113,11 +115,11 @@ export function ScanControls({ onDeviceFound }: ScanControlsProps) {
             <div className="flex items-center space-x-3">
               <Button
                 onClick={startScan}
-                disabled={!isSupported || isScanning}
+                disabled={isScanning}
                 className="bg-tech-blue hover:bg-blue-600 text-white"
               >
                 <Play className="h-4 w-4 mr-2" />
-                Start Scan
+                {!isSupported ? "Start Demo" : "Start Scan"}
               </Button>
               <Button
                 onClick={stopScan}

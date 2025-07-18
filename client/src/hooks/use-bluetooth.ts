@@ -15,12 +15,13 @@ export function useBluetoothScanner() {
   const [isScanning, setIsScanning] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSupported, setIsSupported] = useState(false);
+  const [demoMode, setDemoMode] = useState(false);
   const [scanStartTime, setScanStartTime] = useState<Date | null>(null);
   const scanIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const checkBluetoothSupport = useCallback(() => {
     if (!navigator.bluetooth) {
-      setError("Web Bluetooth API is not supported in this browser");
+      setError("Web Bluetooth API requires Chrome/Edge 56+ or Opera 43+ with HTTPS");
       setIsSupported(false);
       return false;
     }
@@ -54,12 +55,15 @@ export function useBluetoothScanner() {
   }, [isTargetDevice]);
 
   const startScan = useCallback(async () => {
-    if (!checkBluetoothSupport()) {
-      return;
+    const isBluetoothSupported = checkBluetoothSupport();
+    
+    if (!isBluetoothSupported) {
+      // Enable demo mode when Bluetooth isn't supported
+      setDemoMode(true);
+      setError("Using demo mode - Web Bluetooth API not available");
     }
 
     try {
-      setError(null);
       setIsScanning(true);
       setScanStartTime(new Date());
       setDevices([]);
@@ -128,6 +132,7 @@ export function useBluetoothScanner() {
     isScanning,
     error,
     isSupported,
+    demoMode,
     scanStartTime,
     startScan,
     stopScan,
